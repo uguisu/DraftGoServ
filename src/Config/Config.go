@@ -1,5 +1,11 @@
 package Config
 
+import (
+    "net/http"
+    "log"
+    "Controller"
+)
+
 // Server configaration
 type ServerConfig struct {
     port      string
@@ -8,16 +14,61 @@ type ServerConfig struct {
 var _s ServerConfig
 
 func GetPort() string {
-    return ":" + port
+    return ":" + _s.port
 }
 
+/**
+ * Load Url mappings
+ */
+func loadUrlMappings() <-chan bool {
+    // Declare a channel for loading config
+    loadUrlMappingConfigFinished := make(chan bool)
+
+    go func() {
+
+        log.Println("Execute loadUrlMappings() ...")
+
+        http.HandleFunc("/hello", Controller.HelloServer)
+        loadUrlMappingConfigFinished <- true
+        close(loadUrlMappingConfigFinished)
+    }()
+
+    return loadUrlMappingConfigFinished
+}
+
+/**
+ * Load Server settings
+ */
+func loadServerConfig() <-chan bool {
+    // Declare a channel for loading config
+    loadServerConfigFinished := make(chan bool)
+
+    go func() {
+
+        log.Println("Execute loadServerConfig() ...")
+
+        _s.port = "8080"
+        loadServerConfigFinished <- true
+        close(loadServerConfigFinished)
+    }()
+
+    return loadServerConfigFinished
+}
+
+/**
+ * Load Config
+ */
 func LoadConfig() <-chan bool {
 
     // Declare a channel for loading config
-    configFinished = make(chan bool)
+    configFinished := make(chan bool)
+
+    loadUrlMappingConfigFinished := loadUrlMappings()
+    loadServerConfigFinished     := loadServerConfig()
 
     go func() {
-        _s.port = "8080"
+        <-loadUrlMappingConfigFinished
+        <-loadServerConfigFinished
         configFinished <- true
         close(configFinished)
     }()

@@ -3,7 +3,6 @@ package main
 import (
     "net/http"
     "log"
-    "Controller"
     "Config"
 )
 
@@ -12,12 +11,19 @@ import (
  */
 func main() {
 
+    // Load config
+    configFinished := Config.LoadConfig()
+    if <- configFinished {
+        log.Println("Load config finished.")
+    } else {
+        log.Fatal("Unknow excetion whien loading config")
+    }
 
-    go Config.LoadConfig()
+    log.Println("Server started.")
 
-    http.HandleFunc("/hello", Controller.HelloServer)
+    // Start server
     err := http.ListenAndServe(Config.GetPort(), nil)
     if err != nil {
-            log.Fatal("ListenAndServe: ", err)
+        log.Fatal("Unknow excetion: ", err)
     }
 }
