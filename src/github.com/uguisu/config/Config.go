@@ -1,9 +1,9 @@
 package config
 
 import (
-    "net/http"
+//    "net/http"
     "log"
-    Controller "github.com/uguisu/controller"
+//    Controller "github.com/uguisu/controller"
 )
 
 // Server configaration
@@ -28,7 +28,7 @@ func loadUrlMappings() <-chan bool {
 
         log.Println("Execute loadUrlMappings() ...")
 
-        http.HandleFunc("/hello", Controller.HelloServer)
+//        http.HandleFunc("/hello", Controller.HelloServer)
         loadUrlMappingConfigFinished <- true
         close(loadUrlMappingConfigFinished)
     }()

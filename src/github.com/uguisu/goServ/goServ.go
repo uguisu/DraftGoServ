@@ -3,7 +3,8 @@ package main
 import (
     "net/http"
     "log"
-    Config "github.com/uguisu/config"
+    Config             "github.com/uguisu/config"
+    DefaultDispatcher  "github.com/uguisu/dispatcher"
 )
 
 /**
@@ -21,8 +22,10 @@ func main() {
 
     log.Println("Server started.")
 
+	dp := DefaultDispatcher.Create()
+
     // Start server
-    err := http.ListenAndServe(Config.GetPort(), nil)
+    err := http.ListenAndServe(Config.GetPort(), dp)
     if err != nil {
         log.Fatal("Unknow excetion: ", err)
     }

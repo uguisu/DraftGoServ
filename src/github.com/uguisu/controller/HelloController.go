@@ -1,4 +1,4 @@
-package Ccontroller
+package Controller
 
 import (
     "io"
@@ -9,10 +9,10 @@ import (
 /**
  * Handle URL /hello
  */
-func HelloServer(w http.ResponseWriter, req *http.Request) {
+func HelloServer(res http.ResponseWriter, req *http.Request) {
 
     log.Println("An incomming request");
 
-    io.WriteString(w, "hello, world!\n")
+    io.WriteString(res, "hello, world!\n")
 
 }
