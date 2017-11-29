@@ -1,9 +1,9 @@
-package Config
+package config
 
 import (
     "net/http"
     "log"
-    "Controller"
+    Controller "github.com/uguisu/controller"
 )
 
 // Server configaration
