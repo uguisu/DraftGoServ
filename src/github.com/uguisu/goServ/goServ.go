@@ -3,7 +3,7 @@ package main
 import (
     "net/http"
     "log"
-    "Config"
+    Config "github.com/uguisu/config"
 )
 
 /**
