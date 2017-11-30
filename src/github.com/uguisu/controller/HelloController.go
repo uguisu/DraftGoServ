@@ -6,13 +6,30 @@ import (
     "log"
 )
 
+
+func HelloController(res http.ResponseWriter, req *http.Request, isASynchronized bool, callHandler chan bool) {
+    if !isASynchronized {
+        go helloServer_sync(res, req, callHandler)
+    } else {
+        go helloServer_async(res, req)
+        callHandler <- true
+    }
+}
+
 /**
  * Handle URL /hello
  */
-func HelloServer(res http.ResponseWriter, req *http.Request) {
+func helloServer_async(res http.ResponseWriter, req *http.Request) {
 
-    log.Println("An incomming request");
+    helloController_Process(res, req)
 
-    io.WriteString(res, "hello, world!\n")
+}
 
+func helloServer_sync(res http.ResponseWriter, req *http.Request, callHandler chan bool) {
+    helloController_Process(res, req)
+    callHandler <- true
+}
+
+func helloController_Process(res http.ResponseWriter, req *http.Request) {
+    // TODO
 }
