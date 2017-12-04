@@ -1,9 +1,7 @@
 package config
 
 import (
-//    "net/http"
     "log"
-//    Controller "github.com/uguisu/controller"
 )
 
 // Server configaration
@@ -28,7 +26,9 @@ func loadUrlMappings() <-chan bool {
 
         log.Println("Execute loadUrlMappings() ...")
 
+		// TODO: Hard coding URL handler
 //        http.HandleFunc("/hello", Controller.HelloServer)
+
         loadUrlMappingConfigFinished <- true
         close(loadUrlMappingConfigFinished)
     }()
@@ -63,9 +63,12 @@ func LoadConfig() <-chan bool {
     // Declare a channel for loading config
     configFinished := make(chan bool)
 
+	// settings for URL mapping
     loadUrlMappingConfigFinished := loadUrlMappings()
+    // settings for Server config
     loadServerConfigFinished     := loadServerConfig()
 
+	// waiting settings method return
     go func() {
         <-loadUrlMappingConfigFinished
         <-loadServerConfigFinished
